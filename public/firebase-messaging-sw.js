@@ -28,11 +28,12 @@ messaging.onBackgroundMessage(function (payload) {
     body: payload.notification.body,
     data: payload.data,
     taskId: payload.data.taskId,
+    tag: "notification-1",
   };
 
   const channel = new BroadcastChannel("NotificationTaskView");
 
-  // after use click notify on panner Inside the notification click event handler
+  //after use click notify on panner Inside the notification click event handler
   self.registration.getNotifications().then(function (notifications) {
     console.log("channel.postMessage ", notifications);
     const dataSent = [];
@@ -48,8 +49,5 @@ messaging.onBackgroundMessage(function (payload) {
     channel.postMessage(dataSent);
   });
 
-  return self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
