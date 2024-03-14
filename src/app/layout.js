@@ -8,6 +8,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { ModalProvider } from "@/context/ModalContext";
+import { DeviceInfoProvider } from "@/context/DeviceInfoContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -20,11 +21,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <ThemeRegistry>
         <ServiceWorkerRegister>
-          <ModalProvider>
-            <AuthProvider>
-              <body>{children}</body>
-            </AuthProvider>
-          </ModalProvider>
+          <DeviceInfoProvider>
+            <ModalProvider>
+              <AuthProvider>
+                <body>{children}</body>
+              </AuthProvider>
+            </ModalProvider>
+          </DeviceInfoProvider>
         </ServiceWorkerRegister>
       </ThemeRegistry>
     </html>

@@ -14,9 +14,11 @@ import BedgeStatus from "@/common/BadgeStatus";
 import { useContext } from "react";
 import { Box } from "@mui/material";
 import { ModalContext } from "@/context/ModalContext";
+import { DeviceInfoContext } from "@/context/DeviceInfoContext";
 
 const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
   const { handleOnMessage, setNotifications } = useContext(ModalContext);
+  const { deviceInfo } = useContext(DeviceInfoContext);
 
   const firstLoad = React.useRef(true);
 
@@ -76,7 +78,8 @@ const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
   useEffect(() => {
     if (firstLoad.current) {
       firstLoad.current = false;
-      requestPermission(handleOnMessage, udpateTokenDeviceId);
+      deviceInfo?.isActiveNotification &&
+        requestPermission(handleOnMessage, udpateTokenDeviceId);
     }
   }, [firstLoad.current]);
   const renderEmptyContent = () => {

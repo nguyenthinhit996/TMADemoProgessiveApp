@@ -161,6 +161,19 @@ const getUserId = () => {
 
 const TASK_LOCAL_KEY = "task";
 
+function minVersionCheck(versionString, majorVersion, minorVersion) {
+  const [osMajorVersion, osMinorVersion] = versionString.split(".");
+  if (
+    Number(osMajorVersion) < majorVersion ||
+    (Number(osMajorVersion) === majorVersion &&
+      Number(osMinorVersion) < minorVersion)
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export {
   mapStatusSelectOption,
   mapWarehouseSelectOption,
@@ -172,4 +185,5 @@ export {
   formatDatetime,
   getUserId,
   TASK_LOCAL_KEY,
+  minVersionCheck,
 };

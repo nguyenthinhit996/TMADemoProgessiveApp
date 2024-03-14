@@ -25,6 +25,7 @@ import {
   udpateTokenDeviceId,
 } from "@/util/Notification";
 import { ModalContext } from "@/context/ModalContext";
+import { DeviceInfoContext } from "@/context/DeviceInfoContext";
 import axiosInstance from "@/config/axiosConfig";
 
 const ERROR_MSG_MAP = {
@@ -45,6 +46,7 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const { handleOnMessage } = useContext(ModalContext);
+  const { deviceInfo } = useContext(DeviceInfoContext);
 
   const router = useRouter();
   const { setUser } = useContext(AuthContext);
@@ -70,7 +72,12 @@ export default function SignIn() {
         setUser({ ...userCredential.user, userId });
         localStorage.setItem("token", userCredential?.user?.accessToken);
         localStorage.setItem("userId", userId);
-        await requestPermissionLoginPage(handleOnMessage, udpateTokenDeviceId);
+
+        deviceInfo?.isActiveNotification &&
+          (await requestPermissionLoginPage(
+            handleOnMessage,
+            udpateTokenDeviceId
+          ));
         router.push("/");
       }
     } catch (error) {
