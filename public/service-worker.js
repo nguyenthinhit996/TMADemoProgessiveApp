@@ -239,45 +239,44 @@ async function sendOfflinePostRequestsToServer() {
 
     allRecords.onsuccess = function () {
       if (allRecords.result && allRecords.result.length > 0) {
+        const lastRecord = allRecords.result.pop();
+        if (lastRecord && lastRecord.url.includes("pwdbackend")) {
+          // perform request over network
+          // only submit the last item in indexedDB(due to its status is the latest)
+          fetch(lastRecord.url, {
+            method: "PUT",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: lastRecord.authHeader,
+            },
+            body: lastRecord.payload,
+          }).then((response) => {
+            if (response.ok) {
+              const transaction = db.transaction(
+                [objectStoreName],
+                "readwrite"
+              );
+              const objectStore = transaction.objectStore(objectStoreName);
+              // remove details from IndexedDB
+              objectStore.delete(lastRecord.id);
+            } else {
+              console.log(
+                "An error occured whilst trying to send a PUT request from IndexedDB."
+              );
+            }
+          });
+        }
+
         for (var i = 0; i < allRecords.result.length; i++) {
           console.log("IndexedDB records: ", allRecords.result);
           currentRecord = allRecords.result[i];
 
-          const payload = JSON.parse(currentRecord.payload);
-
           // delete the intermediate request
-          if (payload?.status !== "COMPLETED") {
-            const transaction = db.transaction([objectStoreName], "readwrite");
-            const objectStore = transaction.objectStore(objectStoreName);
-            // remove details from IndexedDB
-            objectStore.delete(currentRecord.id);
-          } else {
-            // perform request over network
-            // only submit the last item in indexedDB(due to its status is the latest)
-            fetch(currentRecord.url, {
-              method: "PUT",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: currentRecord.authHeader,
-              },
-              body: currentRecord.payload,
-            }).then((response) => {
-              if (response.ok) {
-                const transaction = db.transaction(
-                  [objectStoreName],
-                  "readwrite"
-                );
-                const objectStore = transaction.objectStore(objectStoreName);
-                // remove details from IndexedDB
-                objectStore.delete(currentRecord.id);
-              } else {
-                console.log(
-                  "An error occured whilst trying to send a PUT request from IndexedDB."
-                );
-              }
-            });
-          }
+          // remove details from IndexedDB
+          const transaction = db.transaction([objectStoreName], "readwrite");
+          const objectStore = transaction.objectStore(objectStoreName);
+          objectStore.delete(currentRecord.id);
         }
       }
     };
