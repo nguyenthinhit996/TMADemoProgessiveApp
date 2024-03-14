@@ -49,7 +49,7 @@ messaging.onBackgroundMessage(function (payload) {
     channel.postMessage(dataSent);
   });
 
-  self.registration.hideNotification();
+  //self.registration.hideNotification();
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
