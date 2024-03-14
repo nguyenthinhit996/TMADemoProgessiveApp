@@ -51,7 +51,7 @@ export default function FullScreenDialog() {
       ? notifications.filter((item) => !item.isRead)
       : notifications;
     setMessages(filteredNotifications);
-  }, [isFilterd, notifications]);
+  }, [isFilterd, notifications, open]);
 
   return (
     <Box>
@@ -98,7 +98,10 @@ export default function FullScreenDialog() {
               <IconButton
                 edge="start"
                 color="inherit"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  setIsFilterd(false);
+                }}
                 aria-label="close"
               >
                 <ChevronLeftIcon />
@@ -121,7 +124,13 @@ export default function FullScreenDialog() {
               <ListItemButton
                 onClick={() => {
                   handleViewMessage(msg.id);
-                  msg?.taskId && router.push(`/tasks/${msg.taskId}/detail`);
+                  msg?.taskId && router.push(`/detail`);
+                }}
+                sx={{
+                  backgroundColor: msg.isRead ? "#fff" : "#fce2d2",
+                  "&:hover": {
+                    backgroundColor: msg.isRead ? "#fff" : "#fce2d2",
+                  },
                 }}
               >
                 <ListItemText primary={msg.title} secondary={msg.text} />

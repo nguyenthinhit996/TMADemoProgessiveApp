@@ -83,8 +83,8 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
       if (navigator?.serviceWorker?.controller) {
         const msg = {
           ...payload,
-          taskId: id,
-          url: `https://pwdbackend.onrender.com/users/${user.userId}/tasks`,
+          taskId,
+          url: `https://pwdbackend.onrender.com/users/${payload.userId}/tasks`,
         };
         navigator.serviceWorker.controller.postMessage(msg);
       }

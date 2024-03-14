@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { Divider, styled, Badge } from "@mui/material";
+import { styled, Badge } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ModalContext } from "@/context/ModalContext";
 
@@ -43,7 +43,14 @@ export default function CustomListItem({ notifications }) {
   const router = useRouter();
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: 360,
+        minWidth: 300,
+        bgcolor: "background.paper",
+      }}
+    >
       <nav aria-label="main mailbox folders">
         {notifications?.length > 0 ? (
           <List sx={{ display: "flex", flexDirection: "column" }}>
@@ -52,14 +59,10 @@ export default function CustomListItem({ notifications }) {
                 <ListItemButton
                   onClick={() => {
                     handleViewMessage(msg.id);
-                    msg?.taskId && router.push(`/tasks/${msg.taskId}/detail`);
+                    msg?.taskId && router.push(`/detail`);
                   }}
                 >
-                  <ListItemText
-                    sx={{ ml: 4 }}
-                    primary={msg?.title}
-                    secondary={msg?.text}
-                  />
+                  <ListItemText primary={msg?.title} secondary={msg?.text} />
                 </ListItemButton>
               ) : (
                 <StyledBadge
@@ -76,7 +79,7 @@ export default function CustomListItem({ notifications }) {
                   <ListItemButton
                     onClick={() => {
                       handleViewMessage(msg.id);
-                      msg?.taskId && router.push(`/tasks/${msg.taskId}/detail`);
+                      msg?.taskId && router.push(`/detail`);
                     }}
                   >
                     <ListItemText
@@ -90,7 +93,7 @@ export default function CustomListItem({ notifications }) {
             })}
           </List>
         ) : (
-          <Box sx={{ minWidth: "300px" }}>
+          <Box>
             <ListItemText
               sx={{ p: 2, color: "InactiveCaptionText" }}
               primary="Nothing to show"

@@ -18,10 +18,35 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
+  console.log(
+    "[firebase-messaging-sw.js] Received background message ",
+    payload
+  );
+
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
+    data: payload.data,
+    taskId: payload.data.taskId,
   };
+
+  const channel = new BroadcastChannel("NotificationTaskView");
+
+  // after use click notify on panner Inside the notification click event handler
+  self.registration.getNotifications().then(function (notifications) {
+    console.log("channel.postMessage ", notifications);
+    const dataSent = [];
+    notifications.forEach((element) => {
+      if (element.data.FCM_MSG) {
+        let newObject = {
+          data: element.data.FCM_MSG,
+        };
+        dataSent.push(newObject);
+      }
+    });
+
+    channel.postMessage(dataSent);
+  });
 
   return self.registration.showNotification(
     notificationTitle,

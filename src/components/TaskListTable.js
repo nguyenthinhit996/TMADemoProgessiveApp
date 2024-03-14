@@ -7,32 +7,71 @@ import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Tooltip from "@mui/material/Tooltip";
-import { useRouter } from "next/navigation";
 import { PulseLoader } from "react-spinners";
 import { useEffect } from "react";
 import { requestPermission, udpateTokenDeviceId } from "@/util/Notification";
 import BedgeStatus from "@/common/BadgeStatus";
 import { useContext } from "react";
-import axiosInstance from "@/config/axiosConfig";
 import { Box } from "@mui/material";
 import { ModalContext } from "@/context/ModalContext";
-import { getUserId, TASK_LOCAL_KEY } from "@/util/Utils";
-import { useState } from "react";
 
-const TaskListTable = ({ tasks = [], isLoadingData = true }) => {
-  const router = useRouter();
-  const { handleOnMessage } = useContext(ModalContext);
+const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
+  const { handleOnMessage, setNotifications } = useContext(ModalContext);
 
-  const handleClickDetail = async (id) => {
-    try {
-      const { data = {} } = await axiosInstance.get(`/tasks/${id}`);
-      localStorage.setItem(TASK_LOCAL_KEY, JSON.stringify(data));
-      router.push("/detail");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const firstLoad = React.useRef(true);
+
+  console.log("register BroadcastChannel NotificationTaskView");
+  const channel = new BroadcastChannel("NotificationTaskView");
+  channel.onmessage = function (event) {
+    console.log("recieved BroadcastChannel event", event);
+
+    let newNotifications = localStorage.getItem("notifications") || [];
+    newNotifications = JSON.parse(newNotifications) || [];
+    event?.data?.forEach((element) => {
+      const currentData = element.data;
+      const isExist = newNotifications.some((item) => {
+        return parseInt(item.taskId) === parseInt(currentData.data.taskId);
+      });
+      if (!isExist) {
+        const newMessage = {
+          messageId: currentData.fcmMessageId,
+          title: currentData.notification.title,
+          ...currentData?.data,
+          isRead: false,
+        };
+        newNotifications.push(newMessage);
+      }
+    });
+
+    localStorage.setItem("notifications", JSON.stringify(newNotifications));
+    setNotifications(newNotifications);
+  };
+
+  const checkWhenAppTurnoffWithBell = () => {
+    let newNotifications =
+      JSON.parse(localStorage.getItem("notifications")) || [];
+    tasks?.forEach((currentData) => {
+      const isExist = newNotifications.some((item) => {
+        return parseInt(item.taskId) === parseInt(currentData.id);
+      });
+      if (!isExist) {
+        const newMessage = {
+          messageId: currentData.id,
+          title: currentData.title,
+          ...currentData,
+          taskId: currentData.id,
+          isRead: false,
+        };
+        newNotifications.push(newMessage);
+      }
+    });
+    localStorage.setItem("notifications", JSON.stringify(newNotifications));
+    setNotifications(newNotifications);
+  };
+
+  useEffect(() => {
+    checkWhenAppTurnoffWithBell();
+  }, [tasks]);
 
   useEffect(() => {
     if (firstLoad.current) {
@@ -102,7 +141,7 @@ const TaskListTable = ({ tasks = [], isLoadingData = true }) => {
                 <Tooltip title="Details" placement="top-start">
                   <IconButton
                     aria-label="arrow"
-                    onClick={() => handleClickDetail(row.id)}
+                    onClick={() => handleClick(row.id)}
                   >
                     <ArrowRightAltIcon />
                   </IconButton>

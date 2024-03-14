@@ -1,14 +1,13 @@
 // the cache version gets updated every time there is a new deployment
 const CACHE_VERSION = 1;
-const CURRENT_CACHE = `main-${CACHE_VERSION}`;
-const indexedDBName = "WASMOfflinePWA";
+const CURRENT_CACHE = `MainCache-${CACHE_VERSION}`;
+const indexedDBName = "OfflinePWA";
 const objectStoreName = "OfflinePostRequests";
 
 // these are the routes we are going to cache for offline support
 const cacheFiles = [
   "/",
   "/login",
-  "/tasks",
   "/detail",
   "/next.svg",
   "/vercel.svg",
@@ -240,22 +239,46 @@ async function sendOfflinePostRequestsToServer() {
 
     allRecords.onsuccess = function () {
       if (allRecords.result && allRecords.result.length > 0) {
-        console.log("IndexedDB records: ", allRecords.result);
-        // only submit the last item in indexedDB(due to its status is the latest)
-        lastRecord = allRecords.result[allRecords.result.length - 1];
-        fetch(lastRecord.url, {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: lastRecord.authHeader,
-          },
-          body: lastRecord.payload,
-        });
-        const transaction = db.transaction([objectStoreName], "readwrite");
-        const objectStore = transaction.objectStore(objectStoreName);
-        // remove details from IndexedDB
-        objectStore.clear();
+        for (var i = 0; i < allRecords.result.length; i++) {
+          console.log("IndexedDB records: ", allRecords.result);
+          currentRecord = allRecords.result[i];
+
+          const payload = JSON.parse(currentRecord.payload);
+
+          // delete the intermediate request
+          if (payload?.status !== "COMPLETED") {
+            const transaction = db.transaction([objectStoreName], "readwrite");
+            const objectStore = transaction.objectStore(objectStoreName);
+            // remove details from IndexedDB
+            objectStore.delete(currentRecord.id);
+          } else {
+            // perform request over network
+            // only submit the last item in indexedDB(due to its status is the latest)
+            fetch(currentRecord.url, {
+              method: "PUT",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: currentRecord.authHeader,
+              },
+              body: currentRecord.payload,
+            }).then((response) => {
+              if (response.ok) {
+                const transaction = db.transaction(
+                  [objectStoreName],
+                  "readwrite"
+                );
+                const objectStore = transaction.objectStore(objectStoreName);
+                // remove details from IndexedDB
+                objectStore.delete(currentRecord.id);
+              } else {
+                console.log(
+                  "An error occured whilst trying to send a PUT request from IndexedDB."
+                );
+              }
+            });
+          }
+        }
       }
     };
   };

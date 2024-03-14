@@ -3,18 +3,20 @@
 import TaskListItem from "@/components/TaskListItem";
 import Box from "@mui/material/Box";
 import SelectInput from "@/components/common/SelectInput";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { mapStatusSelectOption, mapWarehouseSelectOption } from "@/util/Utils";
 import TaskListTable from "@/components/TaskListTable";
 import Typography from "@mui/material/Typography";
 import axiosInstance from "@/config/axiosConfig";
-import { mapStatusApiResult, getUserId } from "@/util/Utils";
+import { mapStatusApiResult, getUserId, TASK_LOCAL_KEY } from "@/util/Utils";
 import { STATUS_STASK } from "@/common/Text";
 import FullScreenDialog from "@/common/DialogNotificationFullScreen";
 import NavBar from "@/components/common/NavBar";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { Guard } from "@/components/common/Guard.js";
 import { PulseLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
+
 const TaskList = () => {
   const theme = useTheme(); // Access the theme for breakpoint values
 
@@ -24,21 +26,22 @@ const TaskList = () => {
   const [filteredStatus, setFilteredStatus] = useState("ALL");
   const [filteredWarehouse, setFilteredWarehouse] = useState("ALL");
   const [data, setData] = useState([]);
-  const [isLoadingData, setLoadingData] =  useState(true);
+  const [isLoadingData, setLoadingData] = useState(true);
 
   const statusValues = useMemo(() => mapStatusSelectOption(), []);
   const warehouseValues = useMemo(() => mapWarehouseSelectOption(data), [data]);
+  const router = useRouter();
 
   useEffect(() => {
     const userId = getUserId();
     (async () => {
       try {
-        setLoadingData(true)
+        setLoadingData(true);
         const { data: resData } = await axiosInstance.get(
           `/users/${userId}/tasks`
         );
         setData(mapStatusApiResult(resData));
-        setLoadingData(false)
+        setLoadingData(false);
       } catch (error) {}
     })();
   }, []);
@@ -55,6 +58,17 @@ const TaskList = () => {
   }, [data?.length, filteredStatus, filteredWarehouse]);
 
   console.log(finalData);
+
+  const handleClickDetail = useCallback(async (id) => {
+    try {
+      debugger;
+      const { data = {} } = await axiosInstance.get(`/tasks/${id}`);
+      localStorage.setItem(TASK_LOCAL_KEY, JSON.stringify(data));
+      router.push("/detail");
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <Guard>
@@ -108,7 +122,11 @@ const TaskList = () => {
         <Box sx={{ display: { xs: "block", sm: "none" } }}>
           {finalData.length > 0
             ? finalData.map((item) => (
-                <TaskListItem task={item} key={item.id} />
+                <TaskListItem
+                  task={item}
+                  key={item.id}
+                  handleClick={handleClickDetail}
+                />
               ))
             : null}
           {finalData.length === 0 ? (
@@ -126,7 +144,11 @@ const TaskList = () => {
         </Box>
 
         <Box sx={{ display: { xs: "none", sm: "block" } }}>
-          <TaskListTable tasks={finalData} isLoadingData={isLoadingData} />
+          <TaskListTable
+            tasks={finalData}
+            isLoadingData={isLoadingData}
+            handleClick={handleClickDetail}
+          />
         </Box>
       </Box>
     </Guard>

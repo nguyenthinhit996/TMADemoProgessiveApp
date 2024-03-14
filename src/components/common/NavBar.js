@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import BasicTabs from "@/components/common/BasicTabs";
 import { ModalContext } from "@/context/ModalContext";
 import { useContext } from "react";
+import Link from "next/link";
 
 const NavBar = () => {
   // const [open, setOpen] = useState(false);
@@ -41,16 +42,18 @@ const NavBar = () => {
       }}
     >
       <Grid item id="home-icon">
-        <Avatar
-          sx={{
-            bgcolor: "inherit",
-            objectFit: "cover",
-            width: "7rem",
-            height: "fit-content",
-          }}
-          variant="square"
-          src="/assets/img/tma-logo.png"
-        />
+        <Link href="/">
+          <Avatar
+            sx={{
+              bgcolor: "inherit",
+              objectFit: "cover",
+              width: "7rem",
+              height: "fit-content",
+            }}
+            variant="square"
+            src="/assets/img/tma-logo.png"
+          />
+        </Link>
       </Grid>
       <Grid
         container

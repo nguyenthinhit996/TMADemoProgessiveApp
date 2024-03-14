@@ -4,7 +4,7 @@ import BedgeStatus from "@/common/BadgeStatus";
 import IconButton from "@mui/material/IconButton";
 import { useRouter } from "next/navigation";
 
-const TaskListItem = ({ task }) => {
+const TaskListItem = ({ task, handleClick }) => {
   const router = useRouter();
   const { id, title, warehouse, status } = task;
 
@@ -12,7 +12,7 @@ const TaskListItem = ({ task }) => {
     <IconButton
       sx={{ width: "100%" }}
       aria-label="arrow"
-      onClick={() => router.push(`/tasks/${id}/detail`)}
+      onClick={() => handleClick(id)}
     >
       <Box
         container

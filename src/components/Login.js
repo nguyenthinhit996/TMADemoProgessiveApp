@@ -275,32 +275,6 @@ export default function SignIn() {
           >
             Login
           </Button>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="body2" gutterBottom>
-                  {"Don't have an account?"}
-                </Typography>
-              </Box>
-              <Box sx={{ position: "relative", bottom: "0.25rem" }}>
-                <Link href="#" variant="body2" sx={{ textDecoration: "none" }}>
-                  {" Register now"}
-                </Link>
-              </Box>
-            </Box>
-          </Box>
         </Box>
       </Box>
     </Box>
