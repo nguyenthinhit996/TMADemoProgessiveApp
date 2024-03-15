@@ -51,5 +51,5 @@ messaging.onBackgroundMessage(function (payload) {
 
   //self.registration.hideNotification();
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  //self.registration.showNotification(notificationTitle, notificationOptions);
 });
