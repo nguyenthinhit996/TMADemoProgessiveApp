@@ -54,10 +54,12 @@ const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
     let newNotifications =
       JSON.parse(localStorage.getItem("notifications")) || [];
     tasks?.forEach((currentData) => {
-      const isExist = newNotifications.some((item) => {
-        return parseInt(item.taskId) === parseInt(currentData.id);
-      });
-      if (!isExist) {
+      const index = newNotifications.findIndex(
+        (item) => parseInt(item.taskId) === parseInt(currentData.id)
+      );
+      if (index >= 0) {
+        newNotifications[index].isRead = currentData?.status !== "Todo";
+      } else {
         const newMessage = {
           messageId: currentData.id,
           title: currentData.title,

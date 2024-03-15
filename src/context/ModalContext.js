@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
+import { CURRENT_TASK_ID } from "@/util/Utils";
 const mockNotifications = [
   {
     id: 0,
@@ -31,6 +32,7 @@ export const ModalContext = createContext({
 export const ModalProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [openWarning, setOpenWarning] = useState(false);
 
   useEffect(() => {
     const storedValue = localStorage.getItem(NOTIFICATIONS_KEY);
@@ -40,7 +42,6 @@ export const ModalProvider = ({ children }) => {
   }, []);
 
   const handleOnMessage = (message) => {
-    console.log("MSG: ", message);
     const newMessage = {
       messageId: message.messageId,
       title: message.notification.title,
@@ -54,11 +55,12 @@ export const ModalProvider = ({ children }) => {
     });
   };
 
-  const handleViewMessage = (id) => {
-    const index = notifications.findIndex((msg) => msg.id === id);
+  const handleViewMessage = (taskId) => {
+    const index = notifications.findIndex((msg) => msg.taskId === taskId);
     const newNotifications = [...notifications];
     newNotifications[index].isRead = true;
     localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newNotifications));
+    localStorage.setItem(CURRENT_TASK_ID, taskId);
     setNotifications(newNotifications);
     setOpen(false);
   };
@@ -72,6 +74,8 @@ export const ModalProvider = ({ children }) => {
         setNotifications,
         handleOnMessage,
         handleViewMessage,
+        openWarning,
+        setOpenWarning,
       }}
     >
       {children}

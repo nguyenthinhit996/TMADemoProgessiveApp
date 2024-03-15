@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Stack, Typography, styled, Alert } from "@mui/material";
+import { Box, Stack, Typography, styled, Alert, Button } from "@mui/material";
 import BedgeStatus from "@/common/BadgeStatus";
 import { STATUS_STASK } from "@/common/Text";
 import { isEmpty } from "lodash";
@@ -53,7 +53,25 @@ const DetailTaskComponent = ({ data, error, handleOnClick }) => {
   const renderButton = () => {
     switch (data?.status) {
       case "DRAFT":
-        return <ButtonPrimary onClick={handleOnClick}>Start</ButtonPrimary>;
+        return (
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            <Button
+              variant="outlined"
+              color="warning"
+              sx={{
+                width: "100%",
+                backgroundColor: theme.palette.grey[200],
+                color: "black",
+              }}
+              onClick={() => router.back()}
+            >
+              Back
+            </Button>
+            <ButtonPrimary sx={{ width: "100%" }} onClick={handleOnClick}>
+              Start
+            </ButtonPrimary>
+          </Box>
+        );
       case "COMPLETED":
         return (
           <ButtonPrimary onClick={() => router.back()}>Back</ButtonPrimary>

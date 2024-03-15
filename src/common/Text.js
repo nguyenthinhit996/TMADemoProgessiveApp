@@ -3,3 +3,8 @@ export const STATUS_STASK = {
   IN_PROGRESS: "In Progress",
   COMPLETED: "Completed",
 };
+
+export const STEP = {
+  VIEW_DETAIL: "viewdetail",
+  JOURNEY: "Journey",
+};

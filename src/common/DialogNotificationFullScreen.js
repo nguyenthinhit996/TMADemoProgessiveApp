@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -11,30 +10,31 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
 import { ModalContext } from "@/context/ModalContext";
 import { useContext } from "react";
-import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Stack } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Popover from "@mui/material/Popover";
 import { useRouter } from "next/navigation";
+import { useIsOnline } from "react-use-is-online";
+import { TASKS_ID_VISITED } from "@/util/Utils";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
 export default function FullScreenDialog() {
-  const { setOpen, open, notifications, handleViewMessage } =
+  const { setOpen, open, notifications, handleViewMessage, setOpenWarning } =
     useContext(ModalContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isFilterd, setIsFilterd] = React.useState(false);
   const [openFilter, setFilter] = React.useState(false);
   const [messages, setMessages] = React.useState([]);
   const router = useRouter();
+  const { isOffline } = useIsOnline();
 
   const handleClickFilter = (event) => {
     setFilter(true);
@@ -44,6 +44,18 @@ export default function FullScreenDialog() {
   const handleClose = () => {
     setFilter(false);
     setAnchorEl(null);
+  };
+
+  const handleClickDetail = (id) => {
+    let tasksId = localStorage.getItem(TASKS_ID_VISITED) || [];
+    tasksId = !Array.isArray(tasksId) ? JSON.parse(tasksId) : tasksId;
+    const isCurrentIdVisited = tasksId.includes(id);
+    if (isOffline && !isCurrentIdVisited) {
+      setOpenWarning(true);
+      return;
+    }
+    handleViewMessage(id);
+    router.push(`/detail`);
   };
 
   React.useEffect(() => {
@@ -122,10 +134,7 @@ export default function FullScreenDialog() {
           <List>
             {messages.map((msg) => (
               <ListItemButton
-                onClick={() => {
-                  handleViewMessage(msg.id);
-                  msg?.taskId && router.push(`/detail`);
-                }}
+                onClick={() => handleClickDetail(msg.taskId)}
                 sx={{
                   backgroundColor: msg.isRead ? "#fff" : "#fce2d2",
                   "&:hover": {

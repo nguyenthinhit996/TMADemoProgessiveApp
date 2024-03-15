@@ -8,6 +8,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled, Badge } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ModalContext } from "@/context/ModalContext";
+import { useIsOnline } from "react-use-is-online";
+import { TASKS_ID_VISITED } from "@/util/Utils";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -39,8 +41,23 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 export default function CustomListItem({ notifications }) {
-  const { handleViewMessage } = React.useContext(ModalContext);
+  const { handleViewMessage, setOpenWarning } = React.useContext(ModalContext);
   const router = useRouter();
+  const { isOffline } = useIsOnline();
+
+  const handleClickDetail = (id) => {
+    let tasksId = localStorage.getItem(TASKS_ID_VISITED) || [];
+    tasksId = !Array.isArray(tasksId) ? JSON.parse(tasksId) : tasksId;
+    const isCurrentIdVisited = tasksId.includes(id);
+    if (isOffline && !isCurrentIdVisited) {
+      setOpenWarning(true);
+      return;
+    }
+    !isCurrentIdVisited && tasksId.push(id);
+    localStorage.setItem(TASKS_ID_VISITED, JSON.stringify(tasksId));
+    handleViewMessage(id);
+    router.push(`/detail`);
+  };
 
   return (
     <Box
@@ -56,12 +73,7 @@ export default function CustomListItem({ notifications }) {
           <List sx={{ display: "flex", flexDirection: "column" }}>
             {notifications?.map((msg) => {
               return msg.isRead ? (
-                <ListItemButton
-                  onClick={() => {
-                    handleViewMessage(msg.id);
-                    msg?.taskId && router.push(`/detail`);
-                  }}
-                >
+                <ListItemButton onClick={() => handleClickDetail(msg?.taskId)}>
                   <ListItemText primary={msg?.title} secondary={msg?.text} />
                 </ListItemButton>
               ) : (
@@ -77,10 +89,7 @@ export default function CustomListItem({ notifications }) {
                   }}
                 >
                   <ListItemButton
-                    onClick={() => {
-                      handleViewMessage(msg.id);
-                      msg?.taskId && router.push(`/detail`);
-                    }}
+                    onClick={() => handleClickDetail(msg?.taskId)}
                   >
                     <ListItemText
                       sx={{ ml: 4 }}

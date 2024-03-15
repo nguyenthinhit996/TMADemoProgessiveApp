@@ -1,13 +1,20 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { TextareaCus, ButtonPrimary } from "@/common/CustomizeMUI";
+import {
+  TextareaCus,
+  ButtonPrimary,
+  ButtonLoadingPrimary,
+} from "@/common/CustomizeMUI";
 import HorizontalLinearStepper from "@/common/HorizontalLinearStepper";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import axiosInstance from "@/config/axiosConfig";
 import { STEP_STATUS_MAP, getUserId } from "@/util/Utils";
+import { StepActionContext } from "@/context/StepContext";
+import { STEP } from "@/common/Text";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const listImage = {
   0: "/assets/img/step1.png",
@@ -27,8 +34,13 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
   let currentStepData = dataForm?.steps?.[dataForm?.currentStep] || {};
   const noteRef = useRef();
 
+  const { setStepAction } = useContext(StepActionContext);
+
+  const [loading, setLoading] = useState(false);
+
   const handleOnClick = async (currentStepInput) => {
     try {
+      setLoading(true);
       const payload = {
         userId: userIdRef.current,
         status: STEP_STATUS_MAP[dataForm.currentStep],
@@ -62,10 +74,13 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleOnClickBackToHomeScreen = () => {
+    setStepAction(STEP.VIEW_DETAIL);
     router.push("/");
   };
 
@@ -118,9 +133,13 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
             defaultValue={currentStepData?.note ?? ""}
           />
         </Box>
-        <ButtonPrimary onClick={() => handleOnClick(dataForm?.currentStep)}>
+
+        <ButtonLoadingPrimary
+          loading={loading}
+          onClick={() => handleOnClick(dataForm?.currentStep)}
+        >
           Continue
-        </ButtonPrimary>
+        </ButtonLoadingPrimary>
       </Stack>
     );
   };

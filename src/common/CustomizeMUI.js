@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 
 import { Stack } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 export const TextareaCus = React.forwardRef((props, ref) => {
   const blue = {
@@ -79,6 +80,23 @@ export const StyleButtonPrimary = styled(Button)(({ theme }) => ({
 export const ButtonPrimary = (props) => {
   const { children, ...otherProps } = props;
   return <StyleButtonPrimary {...otherProps}> {children}</StyleButtonPrimary>;
+};
+
+export const StyleButtonLoadingPrimary = styled(LoadingButton)(({ theme }) => ({
+  backgroundColor: theme.palette.buttonPrimary.main,
+  color: "white",
+  "&:hover": {
+    backgroundColor: theme.palette.buttonPrimary.hover,
+  },
+}));
+
+export const ButtonLoadingPrimary = (props) => {
+  const { children, ...otherProps } = props;
+  return (
+    <StyleButtonLoadingPrimary {...otherProps}>
+      {children}
+    </StyleButtonLoadingPrimary>
+  );
 };
 
 export const StyledStackLayOut = styled(Stack)(({ theme }) => ({

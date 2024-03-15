@@ -6,6 +6,7 @@ import {
   osName,
   osVersion,
   isIOS,
+  isAndroid,
 } from "react-device-detect";
 
 export const DeviceInfoContext = createContext();
@@ -21,6 +22,7 @@ export const DeviceInfoProvider = ({ children }) => {
       deviceType,
       osVersion,
       isIOS,
+      isAndroid,
       isActiveNotification: true,
     });
   }, []);
