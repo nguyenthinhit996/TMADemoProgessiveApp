@@ -27,8 +27,9 @@ const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
   channel.onmessage = function (event) {
     console.log("recieved BroadcastChannel event", event);
 
-    let newNotifications = localStorage.getItem("notifications") || [];
-    newNotifications = JSON.parse(newNotifications) || [];
+    let newNotifications =
+      JSON.parse(localStorage.getItem("notifications")) || [];
+
     event?.data?.forEach((element) => {
       const currentData = element.data;
       const isExist = newNotifications.some((item) => {
@@ -41,7 +42,7 @@ const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
           ...currentData?.data,
           isRead: false,
         };
-        newNotifications.push(newMessage);
+        newNotifications.unshift(newMessage);
       }
     });
 
@@ -62,9 +63,9 @@ const TaskListTable = ({ tasks = [], isLoadingData = true, handleClick }) => {
           title: currentData.title,
           ...currentData,
           taskId: currentData.id,
-          isRead: false,
+          isRead: currentData?.status !== "Todo",
         };
-        newNotifications.push(newMessage);
+        newNotifications.unshift(newMessage);
       }
     });
     localStorage.setItem("notifications", JSON.stringify(newNotifications));
