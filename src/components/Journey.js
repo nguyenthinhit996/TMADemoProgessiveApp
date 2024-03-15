@@ -9,34 +9,6 @@ import { useSearchParams } from "next/navigation";
 import axiosInstance from "@/config/axiosConfig";
 import { STEP_STATUS_MAP, getUserId } from "@/util/Utils";
 
-const mockData = {
-  idtask: 12,
-  currentStep: 0,
-  isDone: false,
-  steps: [
-    {
-      stepNumber: 0,
-      description: "Move to HCM WareHouse",
-      address: "111 Nguyễn Ðình Chính, Phường 15, Quận Phú Nhuận",
-      noticed: "",
-    },
-    {
-      stepNumber: 1,
-      description: "Move to Customer Address",
-      address:
-        "Chi nhánh 6 (Lab 6): Tòa nhà TMA, Công viên phần mềm Quang Trung, P. Tân Chánh Hiệp, Quận 12",
-      noticed: "",
-    },
-    {
-      stepNumber: 2,
-      description: "Move back Station",
-      address:
-        "Chi nhánh 6 (Lab 6): Tòa nhà TMA, Công viên phần mềm Quang Trung, P. Tân Chánh Hiệp, Quận 12",
-      noticed: "",
-    },
-  ],
-};
-
 const listImage = {
   0: "/assets/img/step1.png",
   1: "/assets/img/step2.png",

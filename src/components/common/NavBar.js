@@ -8,6 +8,7 @@ import BasicTabs from "@/components/common/BasicTabs";
 import { ModalContext } from "@/context/ModalContext";
 import { useContext } from "react";
 import Link from "next/link";
+import { Button } from "@mui/material";
 
 const NavBar = () => {
   // const [open, setOpen] = useState(false);
@@ -26,6 +27,11 @@ const NavBar = () => {
     setOpen(false);
   };
 
+  const reloadWindown = () => {
+    console.log("reloadWindown");
+    window.location.reload();
+  };
+
   return (
     <Grid
       container
@@ -42,7 +48,7 @@ const NavBar = () => {
       }}
     >
       <Grid item id="home-icon">
-        <Link href="/">
+        <Button onClick={reloadWindown}>
           <Avatar
             sx={{
               bgcolor: "inherit",
@@ -53,7 +59,7 @@ const NavBar = () => {
             variant="square"
             src="/assets/img/tma-logo.png"
           />
-        </Link>
+        </Button>
       </Grid>
       <Grid
         container

@@ -10,23 +10,19 @@ import {
 const steps = [
   {
     title: "In Safari, click the 'share' button",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPtKk_Q17k011vn9MfU9XQfPiGu1DS-ZgfXw&usqp=CAU",
+    image: "/assets/img/ios-install-step1.png",
   },
   {
     title: "Click 'Add to Home Screen'",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPtKk_Q17k011vn9MfU9XQfPiGu1DS-ZgfXw&usqp=CAU",
+    image: "/assets/img/ios-install-step2.png",
   },
   {
     title: "Review settings and click 'Add'",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPtKk_Q17k011vn9MfU9XQfPiGu1DS-ZgfXw&usqp=CAU",
+    image: "/assets/img/ios-install-step3.png",
   },
   {
     title: "Launch app from home screen'",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPtKk_Q17k011vn9MfU9XQfPiGu1DS-ZgfXw&usqp=CAU",
+    image: "/assets/img/ios-install-step4.png",
   },
 ];
 
@@ -53,7 +49,10 @@ const IOSInstallPWAInstruction = () => {
         >
           How to download Progressive Web App
         </Typography>
-        <p>For IOS phone, please download Progressive Web App to continue</p>
+        <p>
+          For IOS phone, please download Progressive Web App to continue. Thank
+          you
+        </p>
       </Box>
       <Grid container spacing={2}>
         {steps.map((step, index) => {
@@ -67,9 +66,10 @@ const IOSInstallPWAInstruction = () => {
                 </CardContent>
                 <CardMedia
                   component="img"
-                  height="200"
+                  height={"400px"}
                   image={step.image}
                   alt={step.title}
+                  style={{ objectFit: "contain" }}
                 />
               </Card>
             </Grid>

@@ -5,6 +5,7 @@ import { DeviceInfoContext } from "@/context/DeviceInfoContext";
 import { minVersionCheck } from "@/util/Utils";
 import WarningModal from "@/components/common/WarningModal";
 import IOSInstallPWAInstruction from "@/components/IOSInstallPWAInstruction";
+import { IOS_WARNING_MSG } from "@/util/Utils";
 
 export default function Home() {
   const { deviceInfo, setDeviceInfo } = useContext(DeviceInfoContext);
@@ -32,6 +33,7 @@ export default function Home() {
       <WarningModal
         open={uiState.open}
         onClose={() => setUIState((prev) => ({ ...prev, open: false }))}
+        message={IOS_WARNING_MSG}
       />
       {uiState.showInstruction ? <IOSInstallPWAInstruction /> : <Login />}
     </Fragment>
