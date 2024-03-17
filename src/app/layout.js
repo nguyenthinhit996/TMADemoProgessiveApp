@@ -1,3 +1,4 @@
+"use client";
 import ThemeRegistry from "@/theme/ThemeRegistry";
 import ServiceWorkerRegister from "@/context/ServiceWorkerRegister";
 import { AuthProvider } from "@/context/AuthContext";
@@ -10,6 +11,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { ModalProvider } from "@/context/ModalContext";
 import { DeviceInfoProvider } from "@/context/DeviceInfoContext";
+import PullToRefresh from "pulltorefreshjs"
+
 
 export const metadata = {
   title: "Delivery App",
@@ -18,6 +21,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
+  const standalone = window.matchMedia("(display-mode: standalone)").matches
+
+  if (standalone) {
+      PullToRefresh.init({
+          onRefresh() {
+              window.location.reload()
+          },
+      })
+  }
+
   return (
     <html lang="en">
       <ThemeRegistry>
