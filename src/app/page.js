@@ -64,7 +64,7 @@ const TaskList = () => {
     })();
   }, []);
  
-  if (deviceInfo.standalone) {
+  if (deviceInfo?.standalone) {
       PullToRefresh.init({
           onRefresh() {
               window.location.reload()
