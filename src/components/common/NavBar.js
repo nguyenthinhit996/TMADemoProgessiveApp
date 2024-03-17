@@ -9,12 +9,14 @@ import { ModalContext } from "@/context/ModalContext";
 import { useContext } from "react";
 import Link from "next/link";
 import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   // const [open, setOpen] = useState(false);
   const { open, setOpen, notifications } = useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const id = useMemo(() => (open ? "simple-popover" : undefined), [open]);
+  const router = useRouter();
 
   const unreadMessageCount = notifications?.filter((msg) => !msg.isRead).length;
 
@@ -28,8 +30,8 @@ const NavBar = () => {
   };
 
   const reloadWindown = () => {
-    console.log("reloadWindown");
-    window.location.reload();
+   //library do refesh, 
+   router.push("/");
   };
 
   return (
