@@ -18,6 +18,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
@@ -52,6 +53,11 @@ export default function SignIn() {
 
   const router = useRouter();
   const { setUser } = useContext(AuthContext);
+
+  const theme = useTheme(); // Access the theme for breakpoint values
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.up("sm"));
+  console.log("isDesktop", isDesktop);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -112,11 +118,18 @@ export default function SignIn() {
 
         flexDirection: { xs: "column", lg: "row" },
         alignItems: "center",
+        justifyContent: {
+          xs: "space-evenly",
+          sm: "space-evenly",
+          lg: "flex-end",
+        },
+        gap: { lg: "8rem" },
         height: "80%",
-
+        // gap: { xs: "4rem" },
         backgroundImage: {
-          xs: "url('/assets/img/login-bg-3.png')",
-          md: "url('/assets/img/login-bg-1.png')",
+          xs: "url('/assets/img/login-bg-phone.png')",
+          sm: "url('/assets/img/login-bg-tablet.png')",
+          md: "url('/assets/img/login-bg-large.png')",
         },
         // backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -133,22 +146,29 @@ export default function SignIn() {
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          width: { xs: "75px", lg: "160px" },
-          height: { xs: "45px", lg: "5rem" },
+          width: { xs: "75px", sm: "120px" },
+          height: { xs: "40px", sm: "60px" },
           position: "fixed",
-          top: "2px",
+          top: "10px",
           left: "10px",
           cursor: "pointer",
         }}
       >
         <Link href="/" />
       </Box>
-      <Box>
-        <span> </span>
+
+      <Box sx={{ padding: "1rem" }}>
+        <span></span>
       </Box>
-      <Box>
-        <span> </span>
+
+      <Box sx={{ padding: "1rem" }}>
+        <span></span>
       </Box>
+
+      <Box sx={{ padding: "1rem" }}>
+        <span></span>
+      </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -156,6 +176,7 @@ export default function SignIn() {
           alignItems: { xs: "center", md: "center", lg: "flex-end" },
           mb: { lg: "10rem" },
           // pt: { xs: "10rem", md: "3rem", lg: "3rem" },
+          mt: { lg: "5rem" },
           // pr: { lg: "10rem" },
         }}
       >
@@ -293,6 +314,10 @@ export default function SignIn() {
             </Button>
           )}
         </Box>
+      </Box>
+
+      <Box sx={{ padding: "1rem" }}>
+        <span></span>
       </Box>
     </Box>
   );

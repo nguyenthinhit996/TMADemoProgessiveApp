@@ -30,8 +30,8 @@ const NavBar = () => {
   };
 
   const reloadWindown = () => {
-   //library do refesh, 
-   router.push("/");
+    //library do refesh,
+    router.push("/");
   };
 
   return (
@@ -43,8 +43,6 @@ const NavBar = () => {
         height: "100px",
         flexWrap: "nowrap",
         justifyContent: "space-between",
-        pl: "2rem",
-        pr: "2rem",
         alignItems: "center",
         height: "5rem",
       }}
@@ -72,14 +70,15 @@ const NavBar = () => {
           width: "150px",
           justifyContent: "center",
           alignItems: "center",
-          mr: { xs: "-2rem", md: 0 },
+          gap: { xs: "1rem", sm: "2rem" },
+          marginRight: { sm: "1rem" },
         }}
       >
         <Grid item id="bell-icon">
           <IconButton
+            sx={{ padding: 0 }}
             onClick={handleOpen}
             anchorEl={anchorEl}
-            sx={{ pl: 0, pb: 0 }}
           >
             <Badge color="error" badgeContent={unreadMessageCount}>
               <Avatar alt="Remy Sharp" src="/assets/img/bell64x64.png" />
