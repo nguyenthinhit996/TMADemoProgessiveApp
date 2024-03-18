@@ -1,6 +1,6 @@
 {
-  "name": "Demo PWA",
-  "short_name": "DemoPWA",
+  "name": "Delivery App",
+  "short_name": "DeliveryApp",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#90cdf4",
