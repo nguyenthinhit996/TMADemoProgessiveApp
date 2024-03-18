@@ -200,7 +200,7 @@ const DetailTaskComponent = ({ data, error, handleOnClick }) => {
               startAdornment: <PermPhoneMsgIcon sx={{ marginRight: 1 }} />,
               sx: { borderRadius: "5px" },
             }}
-            value={data?.instruction?.addressCustomer}
+            value={data?.instruction?.numberPhoneCustomer}
           />
         </Box>
       </Box>
@@ -208,7 +208,7 @@ const DetailTaskComponent = ({ data, error, handleOnClick }) => {
       {!isEmpty(data?.instruction?.note) ? (
         <Box>
           <Typography variant="h5">Noticed</Typography>
-          <p>{data.instruction.note}</p>
+          <p>{data?.instruction?.note}</p>
         </Box>
       ) : undefined}
 
