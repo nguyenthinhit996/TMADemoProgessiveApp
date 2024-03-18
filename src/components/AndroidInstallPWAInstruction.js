@@ -14,11 +14,11 @@ const steps = [
     image: "/assets/img/android-install-step1.png",
   },
   {
-    title: "Click 'Add to Home Screen'",
+    title: "Click 'Install app'",
     image: "/assets/img/android-install-step2.png",
   },
   {
-    title: "Review settings and click 'Add'",
+    title: "Review settings and click 'Install'",
     image: "/assets/img/android-install-step3.png",
   },
   {
