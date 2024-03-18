@@ -27,7 +27,7 @@ export default function Home() {
         setUIState({ ...uiState, open: true });
         setDeviceInfo((prev) => ({ ...prev, isActiveNotification: false }));
       }
-    } else if (deviceInfo?.isAndroid) {
+    } else if (deviceInfo?.isAndroid && !deviceInfo.standalone) {
       setUIState({ ...uiState, showAndroidInstruction: true });
     }
   }, [deviceInfo?.isIOS]);
