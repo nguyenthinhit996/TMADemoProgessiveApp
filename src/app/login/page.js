@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <Fragment>
-      <WarningModal
+      {/* <WarningModal
         open={uiState.open}
         onClose={() => setUIState((prev) => ({ ...prev, open: false }))}
         message={IOS_WARNING_MSG}
@@ -43,9 +43,9 @@ export default function Home() {
         <IOSInstallPWAInstruction />
       ) : uiState.showAndroidInstruction ? (
         <AndroidInstallPWAInstruction />
-      ) : (
-        <Login />
-      )}
+      ) : ( */}
+      <Login />
+      {/* )} */}
     </Fragment>
   );
 }
