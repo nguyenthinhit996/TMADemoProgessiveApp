@@ -13,7 +13,6 @@ const cacheFiles = [
   "/vercel.svg",
   "/manifest.json",
   "/assets/img/avatar.jpg",
-  "/assets/img/login-bg.png",
   "/assets/img/tma-logo.png",
   "/assets/img/android-192x192.png",
   "/assets/img/android-36x36.png",
