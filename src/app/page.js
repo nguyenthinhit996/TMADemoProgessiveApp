@@ -14,6 +14,7 @@ import {
   CURRENT_TASK_ID,
   TASKS_ID_VISITED,
   OFFLINE_MSG,
+  BACKGROUND_SYNC
 } from "@/util/Utils";
 import { STATUS_STASK, STEP } from "@/common/Text";
 import FullScreenDialog from "@/common/DialogNotificationFullScreen";
@@ -60,16 +61,27 @@ const TaskList = () => {
         );
         setData(mapStatusApiResult(resData));
         setLoadingData(false);
-      } catch (error) {}
+      } catch (error) { }
     })();
   }, []);
- 
+
+  useEffect(() => {
+    if (isOnline) {
+      const msg = {
+        msgTag: BACKGROUND_SYNC
+      };
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.active.postMessage(msg);
+      });
+    }
+  }, [isOnline])
+
   if (deviceInfo?.standalone) {
-      PullToRefresh.init({
-          onRefresh() {
-              window.location.reload()
-          },
-      })
+    PullToRefresh.init({
+      onRefresh() {
+        window.location.reload()
+      },
+    })
   }
 
   const finalData = useMemo(() => {

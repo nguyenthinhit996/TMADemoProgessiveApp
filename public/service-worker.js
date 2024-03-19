@@ -3,6 +3,7 @@ const CACHE_VERSION = 1;
 const CURRENT_CACHE = `MainCache-${CACHE_VERSION}`;
 const indexedDBName = "OfflinePWA";
 const objectStoreName = "OfflinePostRequests";
+const BACKGROUND_PUT_REQ_TAG = 'bg-put-request'
 
 // these are the routes we are going to cache for offline support
 const cacheFiles = [
@@ -75,7 +76,7 @@ self.addEventListener("install", (evt) => {
    ** If online for the first time, create an indexed db and a table
    ** If online after going offline, hit all requests saved in indexed table to server and empty the table
    */
-  checkNetworkState();
+  // checkNetworkState();
 });
 
 // cache the current page to make it available for offline
@@ -147,6 +148,18 @@ self.addEventListener("fetch", (evt) => {
 function saveIntoIndexedDB(url, authHeader, payload) {
   const DBOpenRequest = indexedDB.open(indexedDBName);
 
+  // create the object store if doesn't exist
+  DBOpenRequest.onupgradeneeded = (event) => {
+    db = event.target.result;
+
+    if (!db.objectStoreNames.contains(objectStoreName)) {
+      objectStore = db.createObjectStore(objectStoreName, {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+    }
+  };
+
   DBOpenRequest.onsuccess = (event) => {
     // create request object
     const postRequest = [
@@ -210,9 +223,11 @@ self.addEventListener("message", async (event) => {
     STEP3: "IN_PROGRESS",
     COMPLETED: "COMPLETED",
   };
-  const { url, userId, status, taskId } = event.data;
+  const UPDATE_TASK_STATUS_TAG = 'updateTaskStatus';
+  const BACKGROUND_SYNC = 'backgroundSync';
+  const { url, status, taskId, msgTag } = event.data;
 
-  if (url) {
+  if (msgTag === UPDATE_TASK_STATUS_TAG && url) {
     const cacheStorage = await caches.open(CURRENT_CACHE);
     const cachedResponse = await cacheStorage.match(url);
     if (!cachedResponse || !cachedResponse.ok) {
@@ -229,6 +244,8 @@ self.addEventListener("message", async (event) => {
     }
     console.log(jsonRes);
     await updateExistingCache(url, jsonRes);
+  } else if (msgTag === BACKGROUND_SYNC) {
+    sendOfflinePostRequestsToServer()
   }
 });
 

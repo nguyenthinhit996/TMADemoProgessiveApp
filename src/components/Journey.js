@@ -11,7 +11,7 @@ import { useTheme, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import axiosInstance from "@/config/axiosConfig";
-import { STEP_STATUS_MAP, getUserId } from "@/util/Utils";
+import { STEP_STATUS_MAP, getUserId, UPDATE_TASK_STATUS_TAG } from "@/util/Utils";
 import { StepActionContext } from "@/context/StepContext";
 import { STEP } from "@/common/Text";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -64,13 +64,16 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
         });
       }
 
-      if (navigator?.serviceWorker?.controller) {
+      if (navigator?.serviceWorker?.ready) {
         const msg = {
           ...payload,
           taskId,
           url: `https://pwa-backend-4mzd.onrender.com/users/${payload.userId}/tasks`,
+          msgTag: UPDATE_TASK_STATUS_TAG
         };
-        navigator.serviceWorker.controller.postMessage(msg);
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.active.postMessage(msg);
+        });
       }
     } catch (err) {
       console.log(err);
@@ -98,9 +101,8 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
         padding={"1rem"}
       >
         <Box>
-          <p>{` Step ${dataForm?.currentStep + 1} of ${
-            dataForm?.steps?.length
-          } `}</p>
+          <p>{` Step ${dataForm?.currentStep + 1} of ${dataForm?.steps?.length
+            } `}</p>
           <Typography variant="h5">{currentStepData?.description}</Typography>
 
           {isMobile ? (

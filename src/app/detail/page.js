@@ -7,12 +7,13 @@ import { StyledStackLayOut } from "@/common/CustomizeMUI";
 import JourneyComponent from "@/components/Journey";
 import { formatDatetime } from "@/util/Utils";
 import axiosInstance from "@/config/axiosConfig";
-import { CURRENT_TASK_ID } from "@/util/Utils";
+import { CURRENT_TASK_ID, BACKGROUND_SYNC } from "@/util/Utils";
 import { StepActionContext } from "@/context/StepContext";
 import { STEP } from "@/common/Text";
 import { PulseLoader } from "react-spinners";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import { useIsOnline } from "react-use-is-online";
 
 const currentStepMap = {
   DRAFT: 0,
@@ -27,6 +28,7 @@ const DetailTask = () => {
   const taskId = localStorage.getItem(CURRENT_TASK_ID);
   const { setStepAction } = useContext(StepActionContext);
   const [isLoading, setIsLoading] = useState(true);
+  const { isOnline } = useIsOnline();
 
   const handleOnClick = async () => {
     setIsStart(true);
@@ -73,6 +75,17 @@ const DetailTask = () => {
       }
     })();
   }, [taskId]);
+
+  useEffect(() => {
+    if (isOnline) {
+      const msg = {
+        msgTag: BACKGROUND_SYNC
+      };
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.active.postMessage(msg);
+      });
+    }
+  }, [isOnline])
 
   return (
     <Box
