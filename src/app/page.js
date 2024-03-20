@@ -28,7 +28,16 @@ import { useIsOnline } from "react-use-is-online";
 import { ModalContext } from "@/context/ModalContext";
 import { StepActionContext } from "@/context/StepContext";
 import { DeviceInfoContext } from "@/context/DeviceInfoContext";
-import PullToRefresh from "pulltorefreshjs"
+import PullToRefresh from "pulltorefreshjs";
+
+export async function generateMetadata({ params, searchParams }) {
+  return {
+    meta: {
+      viewport:
+        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
+    },
+  };
+}
 
 const TaskList = () => {
   const theme = useTheme(); // Access the theme for breakpoint values
@@ -63,13 +72,13 @@ const TaskList = () => {
       } catch (error) {}
     })();
   }, []);
- 
+
   if (deviceInfo?.standalone) {
-      PullToRefresh.init({
-          onRefresh() {
-              window.location.reload()
-          },
-      })
+    PullToRefresh.init({
+      onRefresh() {
+        window.location.reload();
+      },
+    });
   }
 
   const finalData = useMemo(() => {
