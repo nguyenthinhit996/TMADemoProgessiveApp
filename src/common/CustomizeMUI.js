@@ -35,6 +35,7 @@ export const TextareaCus = React.forwardRef((props, ref) => {
     resize: none;
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 0.875rem;
+
     font-weight: 400;
     line-height: 1.5;
     padding: 12px;
@@ -56,6 +57,7 @@ export const TextareaCus = React.forwardRef((props, ref) => {
       box-shadow: 0 0 0 3px ${
         theme.palette.mode === "dark" ? blue[600] : blue[200]
       };
+      font-size: 16px;
     }
 
     // firefox
