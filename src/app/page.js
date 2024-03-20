@@ -1,5 +1,4 @@
 "use client";
-
 import TaskListItem from "@/components/TaskListItem";
 import Box from "@mui/material/Box";
 import SelectInput from "@/components/common/SelectInput";
@@ -29,15 +28,6 @@ import { ModalContext } from "@/context/ModalContext";
 import { StepActionContext } from "@/context/StepContext";
 import { DeviceInfoContext } from "@/context/DeviceInfoContext";
 import PullToRefresh from "pulltorefreshjs";
-
-export async function generateMetadata({ params, searchParams }) {
-  return {
-    meta: {
-      viewport:
-        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
-    },
-  };
-}
 
 const TaskList = () => {
   const theme = useTheme(); // Access the theme for breakpoint values
