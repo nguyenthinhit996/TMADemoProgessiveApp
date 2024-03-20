@@ -10,9 +10,9 @@ import axiosInstance from "@/config/axiosConfig";
 import { CURRENT_TASK_ID } from "@/util/Utils";
 import { StepActionContext } from "@/context/StepContext";
 import { STEP } from "@/common/Text";
-import { PulseLoader } from "react-spinners";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import { ModalContext } from "@/context/ModalContext";
 
 const currentStepMap = {
   DRAFT: 0,
@@ -21,12 +21,13 @@ const currentStepMap = {
 };
 
 const DetailTask = () => {
+  const { notifications } = useContext(ModalContext);
   const [task, setTask] = useState({});
   const [error, setError] = useState();
   const [isStart, setIsStart] = useState(false);
-  const taskId = localStorage.getItem(CURRENT_TASK_ID);
   const { setStepAction } = useContext(StepActionContext);
   const [isLoading, setIsLoading] = useState(true);
+  const taskId = localStorage.getItem(CURRENT_TASK_ID);
 
   const handleOnClick = async () => {
     setIsStart(true);
@@ -56,7 +57,6 @@ const DetailTask = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const taskId = localStorage.getItem(CURRENT_TASK_ID);
         const { data = {} } = await axiosInstance.get(`/tasks/${+taskId}`);
         if (data) {
           const formatData = {
