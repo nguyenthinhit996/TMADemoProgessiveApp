@@ -25,7 +25,7 @@ const mapWarehouseSelectOption = (warehouseOptions = []) => {
 };
 
 const STATUS_MAP = {
-  DRAFT: "Todo",
+  TODO: "Todo",
   IN_PROGRESS: "In Progress",
   COMPLETED: "Completed",
 };

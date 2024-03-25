@@ -15,7 +15,7 @@ import Stack from "@mui/material/Stack";
 import { ModalContext } from "@/context/ModalContext";
 
 const currentStepMap = {
-  DRAFT: 0,
+  TODO: 0,
   STEP2: 1,
   STEP3: 2,
 };
