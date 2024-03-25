@@ -16,7 +16,7 @@ import Stack from "@mui/material/Stack";
 import { useIsOnline } from "react-use-is-online";
 
 const currentStepMap = {
-  DRAFT: 0,
+  TODO: 0,
   STEP2: 1,
   STEP3: 2,
 };
@@ -79,13 +79,13 @@ const DetailTask = () => {
   useEffect(() => {
     if (isOnline) {
       const msg = {
-        msgTag: BACKGROUND_SYNC
+        msgTag: BACKGROUND_SYNC,
       };
       navigator.serviceWorker.ready.then((registration) => {
         registration.active.postMessage(msg);
       });
     }
-  }, [isOnline])
+  }, [isOnline]);
 
   return (
     <Box

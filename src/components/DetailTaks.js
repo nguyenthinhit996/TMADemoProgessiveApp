@@ -52,7 +52,7 @@ const DetailTaskComponent = ({ data, error, handleOnClick }) => {
 
   const renderButton = () => {
     switch (data?.status) {
-      case "DRAFT":
+      case "TODO":
         return (
           <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Button

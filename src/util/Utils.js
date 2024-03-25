@@ -25,7 +25,7 @@ const mapWarehouseSelectOption = (warehouseOptions = []) => {
 };
 
 const STATUS_MAP = {
-  DRAFT: "Todo",
+  TODO: "Todo",
   IN_PROGRESS: "In Progress",
   COMPLETED: "Completed",
 };
@@ -162,8 +162,8 @@ const getUserId = () => {
 const TASK_LOCAL_KEY = "task";
 const CURRENT_TASK_ID = "currentTaskId";
 const TASKS_ID_VISITED = "tasksIdVisited";
-const UPDATE_TASK_STATUS_TAG = 'updateTaskStatus';
-const BACKGROUND_SYNC = 'backgroundSync';
+const UPDATE_TASK_STATUS_TAG = "updateTaskStatus";
+const BACKGROUND_SYNC = "backgroundSync";
 
 function minVersionCheck(versionString, majorVersion, minorVersion) {
   const [osMajorVersion, osMinorVersion] = versionString.split(".");
@@ -200,5 +200,5 @@ export {
   IOS_WARNING_MSG,
   OFFLINE_MSG,
   UPDATE_TASK_STATUS_TAG,
-  BACKGROUND_SYNC
+  BACKGROUND_SYNC,
 };
