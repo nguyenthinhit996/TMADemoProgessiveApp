@@ -3,10 +3,7 @@ import axios from "axios";
 // const baseURL =
 //   process.env.REACT_APP_API_URL || "https://pwdbackend.onrender.com"; // Replace with your actual API base URL
 
-  const baseURL =
-  process.env.REACT_APP_API_URL || "https://pwa-backend-4mzd.onrender.com"; // Replace with your actual API base URL
-
-  
+const baseURL = process.env.REACT_APP_API_URL || "https://english4lives.com"; // Replace with your actual API base URL
 
 const instance = axios.create({
   baseURL,

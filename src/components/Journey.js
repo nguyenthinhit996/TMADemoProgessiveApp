@@ -68,7 +68,7 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
         const msg = {
           ...payload,
           taskId,
-          url: `https://pwa-backend-4mzd.onrender.com/users/${payload.userId}/tasks`,
+          url: `https://english4lives.com/users/${payload.userId}/tasks`,
         };
         navigator.serviceWorker.controller.postMessage(msg);
       }
