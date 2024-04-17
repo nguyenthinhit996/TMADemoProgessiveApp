@@ -72,7 +72,9 @@ const JourneyComponent = ({ taskId, data, currentStep }) => {
         const msg = {
           ...payload,
           taskId,
-          url: `https://english4lives.com/users/${payload.userId}/tasks`,
+          url: `https://pwdbackend.onrender.com/users/${payload.userId}/tasks`,
+          // url: `https://english4lives.com/users/${payload.userId}/tasks`,
+
           msgTag: UPDATE_TASK_STATUS_TAG,
         };
         navigator.serviceWorker.ready.then((registration) => {
